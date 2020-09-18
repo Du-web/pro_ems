@@ -29,7 +29,7 @@
               用户名:
             </td>
             <td valign="middle" align="left">
-              <input type="text" class="inputgri" name="username" />
+              <input type="text" class="inputgri" name="username" v-model="username"/>
             </td>
           </tr>
           <tr>
@@ -37,7 +37,7 @@
               真实姓名:
             </td>
             <td valign="middle" align="left">
-              <input type="text" class="inputgri" name="name" />
+              <input type="text" class="inputgri" name="name" v-model="real_name"/>
             </td>
           </tr>
           <tr>
@@ -45,7 +45,15 @@
               密码:
             </td>
             <td valign="middle" align="left">
-              <input type="password" class="inputgri" name="pwd" />
+              <input type="password" class="inputgri" name="pwd" v-model="pwd"/>
+            </td>
+          </tr>
+          <tr>
+            <td valign="middle" align="right">
+              确认密码:
+            </td>
+            <td valign="middle" align="left">
+              <input type="password" class="inputgri" name="re_pwd" v-model="re_pwd"/>
             </td>
           </tr>
           <tr>
@@ -54,15 +62,15 @@
             </td>
             <td valign="middle" align="left">
               男
-              <input type="radio" class="inputgri" name="sex" value="m" checked="checked"/>
+              <input type="radio" class="inputgri" name="sex" value="m" @click="gender=0" checked="checked"/>
               女
-              <input type="radio" class="inputgri" name="sex" value="f"/>
+              <input type="radio" class="inputgri" name="sex" value="f" @click="gender=1"/>
             </td>
           </tr>
 
         </table>
         <p>
-          <input type="submit" class="button" value="Submit &raquo;" />
+          <input type="submit" class="el-button" value="注册" @click="regist"/>
         </p>
       </div>
     </div>
@@ -76,7 +84,51 @@
 
 <script>
     export default {
-        name: "Register"
+        name: "Register",
+        data(){
+          return {
+            username: '',
+            real_name: '',
+            pwd: '',
+            re_pwd: '',
+            gender: 0
+          }
+        },
+        methods: {
+            regist(){
+                console.log(this.username, this.pwd)
+                this.$axios({
+                    url: "http://127.0.0.1:8000/emsapp/users/",
+                    method: 'post',
+                    data: {
+                        username: this.username,
+                        real_name: this.real_name,
+                        password: this.pwd,
+                        re_pwd: this.re_pwd,
+                        gender: this.gender,
+                    }
+                }).then(res => {
+                    console.log(res);
+                    if (res.data.message){
+                        this.$message({
+                            message: '恭喜你，注册成功',
+                            type: 'success',
+                            duration: 1000,
+                            showClose: true,
+                        });
+                        this.$route.push('/login')
+                    }
+                }).catch(error => {
+                    console.log(error);
+                    this.$message({
+                        message: '用户名已存在或者密码错误',
+                        type: 'success',
+                        duration: 1000,
+                        showClose: true,
+                    });
+                })
+            }
+        }
     }
 </script>
 
