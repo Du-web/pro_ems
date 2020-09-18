@@ -82,19 +82,15 @@
                             duration: 1000,
                             showClose: true,
                         })
-                        let username = res.data.result['username']
+                        console.log(res.data.results)
+                        let username = res.data.results['username']
                         sessionStorage.setItem('user', username)
                         this.$router.push("/index")
                     }else {
                         this.$message.error('用户名或密码不对')
                     }
                 }).catch(error => {
-                    this.$message({
-                        message: '登录失败',
-                        type: 'success',
-                        duration: 1000,
-                        showClose: true,
-                    })
+                    console.log(error)
                 })
             }
 
