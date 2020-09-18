@@ -71,6 +71,8 @@
         </table>
         <p>
           <input type="submit" class="el-button" value="注册" @click="regist"/>
+            &nbsp;&nbsp;
+            <router-link to="/login">登录</router-link>
         </p>
       </div>
     </div>
@@ -116,7 +118,7 @@
                             duration: 1000,
                             showClose: true,
                         });
-                        this.$route.push('/login')
+                        this.$router.push('login/')
                     }
                 }).catch(error => {
                     console.log(error);
