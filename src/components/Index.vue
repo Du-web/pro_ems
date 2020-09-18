@@ -58,7 +58,9 @@
                     </tr>
                 </table>
                 <p>
-                    <input type="button" class="button" value="Add Employee"/>
+                    <el-button>
+                        <router-link to="/add">添加员工</router-link>
+                    </el-button>
                 </p>
             </div>
         </div>
