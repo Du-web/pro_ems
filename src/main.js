@@ -4,6 +4,14 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+import '../static/css/style.css'
+import axios from "axios"
+import ElementUI from 'element-ui'
+
+Vue.prototype.$axios = axios
+
+Vue.use(ElementUI)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
