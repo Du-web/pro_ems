@@ -53,7 +53,6 @@
                         <td>{{emp.age}}</td>
                         <td><a href="javascript:;" @click="del_emp(emp.id)">删除员工</a>&nbsp;
                             <a href="javascript:;" @click="update_emp(emp.id)">更新员工</a>
-                            <router-link :to="'/update/'+emp.id">更新2</router-link>
                         </td>
                     </tr>
                 </table>
@@ -88,6 +87,25 @@
                 }).catch(error => {
                     this.$message.error('查询失败')
                 })
+            },
+            update_emp(num){
+                console.log(num);
+                this.$router.push('/update/' + num)
+            },
+            del_emp(num){
+                let val = window.confirm('确定要删删除吗？')
+                if (val){
+                    this.$axios({
+                        url: "http://127.0.0.1:8000/emsapp/emp/" + num + "/",
+                        method: 'delete',
+                    }).then(res => {
+                        console.log(res);
+                        this.emp_list = res.data.results
+                    }).catch(error => {
+                        console.log(error);
+                    })
+                }
+
             }
         },
         created() {
