@@ -22,7 +22,7 @@
                 <h1>
                     update Emp info:
                 </h1>
-                <form action="emplist.html" method="post">
+<!--                <form action="emplist.html" method="post">-->
                     <table cellpadding="0" cellspacing="0" border="0"
                            class="form_table">
                         <tr>
@@ -38,7 +38,7 @@
                                 name:
                             </td>
                             <td valign="middle" align="left">
-                                <input type="text" class="inputgri" name="name" value="zhangshan"/>
+                                <input type="text" class="inputgri" name="name" v-model="emp_name"/>
                             </td>
                         </tr>
                         <tr>
@@ -46,7 +46,8 @@
                                 photo:
                             </td>
                             <td valign="middle" align="left">
-                                <input type="file" name="photo" />
+                                <img :src="photo" style="height: 60px;"/>
+                                <input type="file" name="photo" ref="photo"/>
                             </td>
                         </tr>
                         <tr>
@@ -54,7 +55,7 @@
                                 salary:
                             </td>
                             <td valign="middle" align="left">
-                                <input type="text" class="inputgri" name="salary" value="20000"/>
+                                <input type="text" class="inputgri" name="salary" v-model="salary"/>
                             </td>
                         </tr>
                         <tr>
@@ -62,14 +63,14 @@
                                 age:
                             </td>
                             <td valign="middle" align="left">
-                                <input type="text" class="inputgri" name="age" value="20"/>
+                                <input type="text" class="inputgri" name="age" v-model="age"/>
                             </td>
                         </tr>
                     </table>
                     <p>
-                        <input type="submit" class="button" value="Confirm" />
+                        <input type="submit" class="el-button" value="确定更改" @click="updateEmp" />
                     </p>
-                </form>
+<!--                </form>-->
             </div>
         </div>
         <div id="footer">
@@ -85,8 +86,64 @@
         name: "UpdateEmp",
         data(){
             return {
-                id: ''
+                id:'',
+                emp_name: '',
+                salary: '',
+                age: '',
+                photo: ''
+
             }
+        },
+        methods:{
+            getParams(){
+                let emp_id = this.$route.params.num;
+                this.id = emp_id
+                this.$axios({
+                    url: "http://127.0.0.1:8000/emsapp/emp/" + emp_id + "/",
+                    method: 'get',
+                }).then(res => {
+                    let response = res.data.results
+                    this.emp_name = response.emp_name
+                    this.salary = response.salary
+                    this.age = response.age
+                    this.photo = response.img
+                }).catch(error => {
+                    console.log(error);
+                })
+            },
+            updateEmp(){
+                let file = this.$refs.photo.files[0]
+                let formData = new FormData();
+                formData.append('emp_name', this.emp_name);
+                formData.append('salary', this.salary);
+                formData.append('age', this.age);
+                formData.append('img', file);
+                this.$axios({
+                    url: "http://127.0.0.1:8000/emsapp/emp/" + this.id + "/",
+                    method: 'patch',
+                    // data:{
+                    //     emp_name:this.emp_name,
+                    //     salary:this.salary,
+                    //     age:this.age
+                    // }
+                    data: formData,
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }).then(res => {
+                    console.log(res);
+                    alert('更新成功');
+                    this.$router.push('/index');
+                }).catch(error => {
+                    console.log(error);
+                })
+            }
+        },
+        created() {
+            this.getParams()
+        },
+        watch:{
+            '$route': 'getParams'
         }
 
     }
