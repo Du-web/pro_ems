@@ -75,22 +75,11 @@
                         password:this.pwd
                     }
                 }).then(res => {
-                    if (res.data.message){
-                        this.$message({
-                            message: '恭喜你，登录成功',
-                            type: 'success',
-                            duration: 1000,
-                            showClose: true,
-                        })
-                        console.log(res.data.results)
-                        let username = res.data.results['username']
-                        sessionStorage.setItem('user', username)
-                        this.$router.push("/index")
-                    }else {
-                        this.$message.error('用户名或密码不对')
-                    }
+                    let username = res.data.results['username']
+                    sessionStorage.setItem('user', username)
+                    this.$router.push("/index")
                 }).catch(error => {
-                    console.log(error)
+                    alert('用户名或密码不对')
                 })
             }
 

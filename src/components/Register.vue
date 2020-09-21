@@ -29,7 +29,9 @@
               用户名:
             </td>
             <td valign="middle" align="left">
-              <input type="text" class="inputgri" name="username" v-model="username"/>
+              <input type="text" class="inputgri" name="username" v-model="username" @blur="onName"/>
+                &nbsp;&nbsp;
+                <span style="color: red">{{span_name}}</span>
             </td>
           </tr>
           <tr>
@@ -37,7 +39,9 @@
               真实姓名:
             </td>
             <td valign="middle" align="left">
-              <input type="text" class="inputgri" name="name" v-model="real_name"/>
+              <input type="text" class="inputgri" name="name" v-model="real_name" @blur="reName"/>
+                &nbsp;&nbsp;
+                <span style="color: red">{{span_rename}}</span>
             </td>
           </tr>
           <tr>
@@ -45,7 +49,9 @@
               密码:
             </td>
             <td valign="middle" align="left">
-              <input type="password" class="inputgri" name="pwd" v-model="pwd"/>
+              <input type="password" class="inputgri" name="pwd" v-model="pwd" @blur="onPWD"/>
+                &nbsp;&nbsp;
+                <span style="color: red">{{span_pwd}}</span>
             </td>
           </tr>
           <tr>
@@ -53,7 +59,9 @@
               确认密码:
             </td>
             <td valign="middle" align="left">
-              <input type="password" class="inputgri" name="re_pwd" v-model="re_pwd"/>
+              <input type="password" class="inputgri" name="re_pwd" v-model="re_pwd" @blur="rePWD"/>
+                &nbsp;&nbsp;
+                <span style="color: red">{{span_repwd}}</span>
             </td>
           </tr>
           <tr>
@@ -88,17 +96,88 @@
     export default {
         name: "Register",
         data(){
-          return {
-            username: '',
-            real_name: '',
-            pwd: '',
-            re_pwd: '',
-            gender: 0
-          }
+            return {
+                username: '',
+                real_name: '',
+                pwd: '',
+                re_pwd: '',
+                gender: 0,
+                span_name: '',
+                span_rename:'',
+                span_pwd: '',
+                span_repwd: ''
+            }
         },
         methods: {
+            pattern_name(){
+               let pattern = /\w{2,}/;
+               if (this.username){
+                   return pattern.test(this.username)
+               }else {
+                   this.span_name = '用户名不能为空';
+                   return false;
+               }
+            },
+            pattern_rename(){
+                let pattern = /[\u4e00-\u9fa5]/;
+                if (this.real_name){
+                    return pattern.test(this.real_name)
+                }else {
+                    this.span_rename = '真实姓名不能为空';
+                    return false;
+                }
+            },
+            pattern_pwd(){
+                let pattern = /^\w{6,18}$/;
+                if (this.pwd){
+                    return pattern.test(this.pwd)
+                }else {
+                    this.span_pwd = '密码不能为空';
+                    return false;
+                }
+            },
+            onName(){
+                let bool = this.pattern_name();
+                 if (bool === false){
+                     this.span_name = '用户名的长度至少为2';
+                     return false;
+                 }else {
+                     this.span_name = '';
+                 }
+            },
+            reName(){
+                let bool = this.pattern_rename();
+                if (bool === false){
+                    this.span_rename = '请填写中文的姓名';
+                    return false;
+                }else {
+                    this.span_rename = '';
+                }
+            },
+            onPWD(){
+                let bool_pwd = this.pattern_pwd()
+                if (bool_pwd === false){
+                    this.span_pwd = '密码必须为6到18位字母、数字或下划线';
+                    return false;
+                }else {
+                    this.span_pwd = '';
+                }
+            },
+            rePWD(){
+                if (this.pwd === this.re_pwd){
+                    this.span_repwd = '';
+                }else {
+                    this.span_repwd = '两次密码不一致';
+                    return false;
+                }
+            },
             regist(){
-                console.log(this.username, this.pwd)
+                let bool_name = this.pattern_name();
+                let bool_rename = this.pattern_rename();
+                let bool_pwd = this.pattern_pwd();
+                if (bool_name === false || bool_rename === false || bool_pwd === false){
+                    return false;
+                }
                 this.$axios({
                     url: "http://127.0.0.1:8000/emsapp/users/",
                     method: 'post',
@@ -112,22 +191,11 @@
                 }).then(res => {
                     console.log(res);
                     if (res.data.message){
-                        this.$message({
-                            message: '恭喜你，注册成功',
-                            type: 'success',
-                            duration: 1000,
-                            showClose: true,
-                        });
+                        alert('恭喜你，注册成功')
                         this.$router.push('login/')
                     }
                 }).catch(error => {
-                    console.log(error);
-                    this.$message({
-                        message: '用户名已存在或者密码错误',
-                        type: 'success',
-                        duration: 1000,
-                        showClose: true,
-                    });
+                    alert('用户名已存在或者密码错误')
                 })
             }
         }

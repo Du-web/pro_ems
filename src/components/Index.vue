@@ -6,7 +6,7 @@
                     <p>
                         2009/11/20
                         <br />
-                        安全退出
+                        <router-link to="/login">安全退出</router-link>
                     </p>
                 </div>
                 <div id="topheader">

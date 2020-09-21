@@ -96,20 +96,10 @@
                         'content-type': 'multipart/form-data'
                     }
                 }).then(res => {
-                    this.$message({
-                        message: '恭喜你，添加成功',
-                        type: 'success',
-                        duration: 1000,
-                        showClose: true,
-                    })
+                    alert('恭喜你，添加成功');
                     this.$router.push('/index');
                 }).catch(error => {
-                    this.$message({
-                        message: '添加失败',
-                        type: 'success',
-                        duration: 1000,
-                        showClose: true,
-                    });
+                    alert('添加失败');
                 })
             }
         }

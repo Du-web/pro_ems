@@ -121,11 +121,6 @@
                 this.$axios({
                     url: "http://127.0.0.1:8000/emsapp/emp/" + this.id + "/",
                     method: 'patch',
-                    // data:{
-                    //     emp_name:this.emp_name,
-                    //     salary:this.salary,
-                    //     age:this.age
-                    // }
                     data: formData,
                     headers: {
                         'content-type': 'multipart/form-data'
@@ -136,6 +131,7 @@
                     this.$router.push('/index');
                 }).catch(error => {
                     console.log(error);
+                    alert('更新失败');
                 })
             }
         },
