@@ -68,13 +68,14 @@
         methods:{
             user_login(){
                 this.$axios({
-                    url: "http://127.0.0.1:8000/emsapp/users/",
-                    method:'get',
-                    params: {
+                    url: "http://127.0.0.1:8000/emsapp/login/",
+                    method:'post',
+                    data: {
                         username:this.username,
                         password:this.pwd
                     }
                 }).then(res => {
+                    console.log(res);
                     let username = res.data.results['username']
                     sessionStorage.setItem('user', username)
                     this.$router.push("/index")

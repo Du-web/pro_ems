@@ -179,7 +179,7 @@
                     return false;
                 }
                 this.$axios({
-                    url: "http://127.0.0.1:8000/emsapp/users/",
+                    url: "http://127.0.0.1:8000/emsapp/register/",
                     method: 'post',
                     data: {
                         username: this.username,
